@@ -12,9 +12,15 @@ import android.view.ViewGroup
 import androidx.lifecycle.observe
 import com.example.kittytime.R
 import com.example.kittytime.databinding.FragmentCatBinding
+import com.example.kittytime.interfaces.RetrofitInterface
+import com.example.kittytime.models.Cat
 import com.example.kittytime.utils.ConnectionWatcher
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import timber.log.Timber
 
 class CatFragment: Fragment() {
     private lateinit var binding: FragmentCatBinding
@@ -27,6 +33,7 @@ class CatFragment: Fragment() {
         registerConnectionWatcher()
         observeConnectionStatus()
         createRetrofit()
+        initializeApiClient()
         return binding.root
     }
 
@@ -56,5 +63,19 @@ class CatFragment: Fragment() {
             .baseUrl(baseURL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
+    }
+
+    private fun initializeApiClient() {
+        val service = retrofit.create(RetrofitInterface::class.java)
+        val call = service.getCat()
+        call.enqueue(object: Callback<Cat> {
+            override fun onResponse(call: Call<Cat>, response: Response<Cat>) {
+                Timber.d("Response success: ${response.body()}")
+            }
+
+            override fun onFailure(call: Call<Cat>, t: Throwable) {
+                Timber.e("Response failure: $t")
+            }
+        })
     }
 }
