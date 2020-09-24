@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Kitty Time</string>
+
+    <!--  START FRAGMENT  -->
+    <string name="fstart_start_button_text">START</string>
+
+    <!--  CAT FRAGMENT  -->
+    <string name="fcat_request_cat_button_text">GET NEW CAT</string>
+
 </resources>
