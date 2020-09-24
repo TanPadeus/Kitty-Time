@@ -1,10 +1,14 @@
 <resources>
     <string name="app_name">Kitty Time</string>
+    <string name="cat_api_key">324d2614-a41a-438a-be52-e40834324276</string>
 
     <!--  START FRAGMENT  -->
     <string name="fstart_start_button_text">START</string>
 
     <!--  CAT FRAGMENT  -->
     <string name="fcat_request_cat_button_text">GET NEW CAT</string>
+    <string name="fcat_alert_title_text">CONNECTION LOST</string>
+    <string name="fcat_alert_message_text">Lost connection to the internet. Returning to start…</string>
+    <string name="fcat_alert_button_text">UNDERSTOOD</string>
 
 </resources>
