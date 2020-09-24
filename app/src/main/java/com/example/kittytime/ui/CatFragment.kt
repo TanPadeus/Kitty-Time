@@ -26,7 +26,7 @@ class CatFragment: Fragment() {
     private lateinit var binding: FragmentCatBinding
     private lateinit var retrofit: Retrofit
     private val connectionWatcher = ConnectionWatcher()
-    private val baseURL = "https://api.thecatapi.com/v1/images/search"
+    private val baseURL = "https://api.thecatapi.com/v1/images/search/"
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentCatBinding.inflate(inflater, container, false)

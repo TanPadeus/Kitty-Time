@@ -5,6 +5,6 @@ import retrofit2.Call
 import retrofit2.http.GET
 
 interface RetrofitInterface {
-    @GET("cat.json")
+    @GET
     fun getCat(): Call<Cat>
 }
