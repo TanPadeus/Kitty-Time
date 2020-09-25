@@ -1,6 +1,9 @@
 package com.example.kittytime.ui
 
 import android.app.AlertDialog
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkRequest
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,7 +11,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.net.toUri
-import androidx.lifecycle.observe
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.example.kittytime.R
 import com.example.kittytime.databinding.FragmentCatBinding
@@ -27,12 +31,14 @@ import timber.log.Timber
 class CatFragment: Fragment() {
     private lateinit var binding: FragmentCatBinding
     private lateinit var retrofit: Retrofit
-    private val connectionWatcher = ConnectionWatcher.getInstance()
+    private lateinit var connectionWatcher: ConnectionWatcher
     private val baseURL = "https://api.thecatapi.com/v1/images/"
+    private val retrievedUrl = MutableLiveData<String>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentCatBinding.inflate(inflater, container, false)
-        observeConnectionStatus()
+        setupConnectionWatcher()
+        observeUrl()
         createRetrofit()
 
         binding.requestCatButton.setOnClickListener {
@@ -42,9 +48,26 @@ class CatFragment: Fragment() {
         return binding.root
     }
 
+    private fun setupConnectionWatcher() {
+        connectionWatcher = ConnectionWatcher.getInstance()
+        registerConnectionWatcher()
+        observeConnectionStatus()
+    }
+
+    private fun registerConnectionWatcher() {
+        val cm = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        cm.registerNetworkCallback(NetworkRequest.Builder().build(), connectionWatcher)
+    }
+
     private fun observeConnectionStatus() {
-        connectionWatcher.isAvailable.observe(viewLifecycleOwner, { isAvailable ->
-            if (!isAvailable) showConnectionLostDialog()
+        connectionWatcher.isAvailable.observe(viewLifecycleOwner, Observer {
+            if (!it) showConnectionLostDialog()
+        })
+    }
+
+    private fun observeUrl() {
+        retrievedUrl.observe(viewLifecycleOwner, Observer {
+            loadImage(binding.catImage, it)
         })
     }
 
@@ -75,11 +98,7 @@ class CatFragment: Fragment() {
         call.enqueue(object: Callback<List<Cat>> {
             override fun onResponse(call: Call<List<Cat>>, response: Response<List<Cat>>) {
                 Timber.d("Response success: retrieved ${response.body()?.size ?: "null"} cat(s).")
-                if (response.body() != null) {
-                    response.body()!!.forEach { cat ->
-                        loadImage(binding.catImage, cat.imageUrl)
-                    }
-                }
+                if (response.body() != null) retrievedUrl.postValue(response.body()!![0].url)
             }
 
             override fun onFailure(call: Call<List<Cat>>, t: Throwable) {
@@ -88,16 +107,9 @@ class CatFragment: Fragment() {
         })
     }
 
-    private fun logCat(cat: Cat?) {
-        Timber.d("Cat ID: ${cat?.id ?: "null"}")
-        Timber.d("Cat URL: ${cat?.imageUrl ?: "null"}")
-        Timber.d("Cat WIDTH: ${cat?.width ?: "null"}")
-        Timber.d("Cat HEIGHT: ${cat?.height ?: "null"}")
-    }
-
     private fun loadImage(view: ImageView, url: String?) {
         url?.let {
-            val uri = url.toUri().buildUpon().scheme("https").build()
+            val uri = it.toUri().buildUpon().scheme("https").build()
             Glide.with(view.context).load(uri).into(view)
         } ?: Timber.d("Missing url")
     }
