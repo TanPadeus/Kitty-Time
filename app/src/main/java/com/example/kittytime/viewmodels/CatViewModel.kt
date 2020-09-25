@@ -16,12 +16,14 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import timber.log.Timber
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class CatViewModel(context: Context) {
+@Singleton
+class CatViewModel @Inject constructor(_context: Context, _connectionWatcher: ConnectionWatcher) {
     private val _retrofit: Retrofit
     private val _baseURL: String = "https://api.thecatapi.com/v1/images/"
 
-    private val _connectionWatcher: ConnectionWatcher = ConnectionWatcher.getInstance()
     val isInternetAvailable: LiveData<Boolean> = _connectionWatcher.isInternetAvailable
 
     private val _receivedURL = MutableLiveData<String>()
@@ -37,7 +39,7 @@ class CatViewModel(context: Context) {
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
 
-        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val cm = _context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         cm.registerNetworkCallback(NetworkRequest.Builder().build(), _connectionWatcher)
     }
 

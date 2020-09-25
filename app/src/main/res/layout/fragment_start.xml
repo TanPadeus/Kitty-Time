@@ -10,18 +10,30 @@
         android:layout_height="match_parent"
         tools:context=".ui.StartFragment">
 
-    <Button
-        android:id="@+id/start_button"
-        android:layout_width="@dimen/button_width"
-        android:layout_height="@dimen/button_height"
-        android:text="@string/fstart_start_button_text"
-        android:textSize="@dimen/text_size"
-        android:gravity="center"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0.95"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fstart_requirements_text"
+            android:textSize="@dimen/text_size"
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.4"/>
+
+        <Button
+            android:id="@+id/start_button"
+            android:layout_width="@dimen/button_width"
+            android:layout_height="@dimen/button_height"
+            android:text="@string/fstart_start_button_text"
+            android:textSize="@dimen/text_size"
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.95"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -41,6 +41,7 @@ android {
 
 dependencies {
     def nav_version = "2.3.0"
+    def dagger_version = "2.27"
     def retrofit_version = "2.9.0"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -67,4 +68,8 @@ dependencies {
 
     //GLIDE
     implementation "com.github.bumptech.glide:glide:3.7.0"
+
+    //DAGGER
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+    implementation "com.google.dagger:dagger:$dagger_version"
 }

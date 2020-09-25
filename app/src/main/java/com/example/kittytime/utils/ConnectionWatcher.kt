@@ -5,8 +5,11 @@ import android.net.Network
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import timber.log.Timber
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class ConnectionWatcher: ConnectivityManager.NetworkCallback() {
+@Singleton
+class ConnectionWatcher @Inject constructor(): ConnectivityManager.NetworkCallback(){
     private val _isInternetAvailable = MutableLiveData<Boolean>()
     val isInternetAvailable: LiveData<Boolean> = _isInternetAvailable
 

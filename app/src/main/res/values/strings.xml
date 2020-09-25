@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Kitty Time</string>
-    <string name="cat_api_key">324d2614-a41a-438a-be52-e40834324276</string>
 
     <!--  START FRAGMENT  -->
+    <string name="fstart_requirements_text">Internet connection is necessary\nto use this app.</string>
     <string name="fstart_start_button_text">START</string>
 
     <!--  CAT FRAGMENT  -->
