@@ -1,6 +1,7 @@
 package com.example.kittytime.ui
 
 import android.app.AlertDialog
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,17 +11,20 @@ import android.widget.ImageView
 import androidx.core.net.toUri
 import com.bumptech.glide.Glide
 import com.example.kittytime.R
+import com.example.kittytime.application.KittyApp
 import com.example.kittytime.databinding.FragmentCatBinding
 import com.example.kittytime.viewmodels.CatViewModel
 import timber.log.Timber
+import javax.inject.Inject
 
 class CatFragment: Fragment() {
     private lateinit var binding: FragmentCatBinding
-    private lateinit var catViewModel: CatViewModel
+
+    @Inject
+    lateinit var catViewModel: CatViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentCatBinding.inflate(inflater, container, false)
-        catViewModel = CatViewModel(requireContext())
         observeConnectionStatus()
         observeURL()
 
@@ -31,8 +35,12 @@ class CatFragment: Fragment() {
         return binding.root
     }
 
-    private fun observeConnectionStatus() {
-        catViewModel.isInternetAvailable.observe(viewLifecycleOwner) {
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        (activity?.application as KittyApp).appComponent.inject(this)
+    }
+
+    private fun observeConnectionStatus() {catViewModel.isInternetAvailable.observe(viewLifecycleOwner) {
             if (!it) showConnectionLostDialog()
         }
     }
