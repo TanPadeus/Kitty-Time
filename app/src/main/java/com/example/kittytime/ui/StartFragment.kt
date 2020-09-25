@@ -16,11 +16,10 @@ import com.example.kittytime.utils.ConnectionWatcher
 
 class StartFragment: Fragment() {
     private lateinit var binding: FragmentStartBinding
-    private val connectionWatcher = ConnectionWatcher()
+    private val connectionWatcher = ConnectionWatcher.getInstance()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentStartBinding.inflate(inflater, container, false)
-        registerConnectionWatcher()
         observeConnectionStatus()
 
         binding.startButton.setOnClickListener {
@@ -28,11 +27,6 @@ class StartFragment: Fragment() {
         }
 
         return binding.root
-    }
-
-    private fun registerConnectionWatcher() {
-        val cm = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        cm.registerNetworkCallback(NetworkRequest.Builder().build(), connectionWatcher)
     }
 
     private fun observeConnectionStatus() {

@@ -12,5 +12,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        registerConnectionWatcher()
+    }
+
+    private fun registerConnectionWatcher() {
+        val cm = applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        cm.registerNetworkCallback(NetworkRequest.Builder().build(), ConnectionWatcher.getInstance())
     }
 }

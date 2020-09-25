@@ -5,7 +5,7 @@ import android.net.Network
 import androidx.lifecycle.MutableLiveData
 import timber.log.Timber
 
-class ConnectionWatcher(): ConnectivityManager.NetworkCallback() {
+class ConnectionWatcher: ConnectivityManager.NetworkCallback() {
     val isAvailable = MutableLiveData<Boolean>()
 
     override fun onAvailable(network: Network) {
@@ -24,5 +24,10 @@ class ConnectionWatcher(): ConnectivityManager.NetworkCallback() {
         super.onLost(network)
         Timber.d("Internet connection lost.")
         isAvailable.postValue(false)
+    }
+
+    companion object {
+        private val instance = ConnectionWatcher()
+        fun getInstance() = instance
     }
 }
