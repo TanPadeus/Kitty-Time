@@ -2,28 +2,30 @@ package com.example.kittytime.utils
 
 import android.net.ConnectivityManager
 import android.net.Network
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import timber.log.Timber
 
 class ConnectionWatcher: ConnectivityManager.NetworkCallback() {
-    val isAvailable = MutableLiveData<Boolean>()
+    private val _isInternetAvailable = MutableLiveData<Boolean>()
+    val isInternetAvailable: LiveData<Boolean> = _isInternetAvailable
 
     override fun onAvailable(network: Network) {
         super.onAvailable(network)
         Timber.d("Internet is available.")
-        isAvailable.postValue(true)
+        _isInternetAvailable.postValue(true)
     }
 
     override fun onUnavailable() {
         super.onUnavailable()
         Timber.d("Internet is not available.")
-        isAvailable.postValue(false)
+        _isInternetAvailable.postValue(false)
     }
 
     override fun onLost(network: Network) {
         super.onLost(network)
         Timber.d("Internet connection lost.")
-        isAvailable.postValue(false)
+        _isInternetAvailable.postValue(false)
     }
 
     companion object {

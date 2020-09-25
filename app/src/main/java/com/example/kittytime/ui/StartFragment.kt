@@ -41,7 +41,7 @@ class StartFragment: Fragment() {
     }
 
     private fun observeConnectionStatus() {
-        connectionWatcher.isAvailable.observe(viewLifecycleOwner, Observer {
+        connectionWatcher.isInternetAvailable.observe(viewLifecycleOwner, Observer {
             binding.startButton.isEnabled = it
         })
     }
